@@ -24,7 +24,7 @@
     - controls_lock_with_slock
     - ansible_service_mgr == 'systemd'
     - display_manager_symlink_result.stat.islnk
-    - display_manager_symlink_result.stat.lnk_source is "/usr/lib/systemd/system/ly.service"
+    - display_manager_symlink_result.stat.lnk_source == "/usr/lib/systemd/system/ly.service"
   tags:
     - lock
 
@@ -39,7 +39,7 @@
     - controls_lock_with_slock
     - ansible_service_mgr == 'systemd'
     - display_manager_symlink_result.stat.islnk
-    - display_manager_symlink_result.stat.lnk_source is "/usr/lib/systemd/system/sddm.service"
+    - display_manager_symlink_result.stat.lnk_source == "/usr/lib/systemd/system/sddm.service"
   tags:
     - lock
 
@@ -54,7 +54,7 @@
     - controls_lock_with_slock
     - ansible_service_mgr == 'systemd'
     - display_manager_symlink_result.stat.islnk
-    - display_manager_symlink_result.stat.lnk_source is "/usr/lib/systemd/system/gdm.service"
+    - display_manager_symlink_result.stat.lnk_source == "/usr/lib/systemd/system/gdm.service"
   tags:
     - lock
 
