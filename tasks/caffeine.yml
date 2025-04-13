@@ -6,8 +6,9 @@
   ansible.builtin.shell:
     # TODO: this is how it could work in KDE but it doesn't?
     # cmd: "kwriteconfig5 --file ~/.config/powermanagementprofilesrc --group AC --group DPMSControl --key idleTime 86400"
-    cmd: >
+    cmd: |
       DISPLAY={{ controls_xdisplay }} xset s off -dpms
+      DISPLAY={{ controls_xdisplay }} xset dpms force on
   ignore_errors: false
   when:
     - controls_dpms
