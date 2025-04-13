@@ -3,14 +3,14 @@
 # https://superuser.com/a/644829
 # https://wiki.archlinux.org/title/Display_Power_Management_Signaling#Modify_DPMS_and_screensaver_settings_with_a_command
 
-# enables monitor off when idle for 5 seconds
+# enables monitor off when idle for a few seconds
 
 - name: Idle
   ansible.builtin.shell:
     cmd: |
       DISPLAY={{ controls_xdisplay }} xset s blank
-      DISPLAY={{ controls_xdisplay }} xset s 5 5 +dpms
-      sleep 5
+      DISPLAY={{ controls_xdisplay }} xset s 1 1 +dpms
+      sleep 2
       DISPLAY={{ controls_xdisplay }} xset dpms force off
   ignore_errors: false
   when:
