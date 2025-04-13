@@ -19,7 +19,5 @@
   when:
     - controls_lockable
     - controls_lock_with_slock
-    - ansible_service_mgr != 'systemd'
-    - ansible_env.XDG_RUNTIME_DIR is defined
   tags:
     - unlock

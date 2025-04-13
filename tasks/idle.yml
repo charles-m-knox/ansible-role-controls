@@ -8,10 +8,10 @@
 - name: Idle
   ansible.builtin.shell:
     cmd: |
+      DISPLAY={{ controls_xdisplay }} xset dpms force off
+      sleep 2
       DISPLAY={{ controls_xdisplay }} xset s blank
       DISPLAY={{ controls_xdisplay }} xset s 1 1 +dpms
-      sleep 2
-      DISPLAY={{ controls_xdisplay }} xset dpms force off
   ignore_errors: false
   when:
     - controls_dpms
