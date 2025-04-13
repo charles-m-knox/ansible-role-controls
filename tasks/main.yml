@@ -7,10 +7,6 @@
   ansible.builtin.import_tasks:
     file: unscreenshare.yml
 
-- name: Idle
-  ansible.builtin.import_tasks:
-    file: idle.yml
-
 - name: Powersaver
   ansible.builtin.import_tasks:
     file: powersaver.yml
@@ -18,6 +14,10 @@
 - name: Lock
   ansible.builtin.import_tasks:
     file: lock.yml
+
+- name: Idle
+  ansible.builtin.import_tasks:
+    file: idle.yml
 
 - name: Suspend
   ansible.builtin.import_tasks:
