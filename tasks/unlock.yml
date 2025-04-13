@@ -5,20 +5,20 @@
     cmd: |
       set -o pipefail
       loginctl unlock-session $(loginctl list-sessions --no-legend  | grep -i seat | awk '{ print $1 }')
-  ignore_errors: false
   when:
     - controls_lockable
     - ansible_service_mgr == 'systemd'
+    - not controls_lock_with_slock
   tags:
     - unlock
 
-- name: Unlock (slock, no systemd)
+- name: Unlock (slock)
   ansible.builtin.shell:
     cmd: "killall -q slock || true"
   become: true
-  ignore_errors: false
   when:
     - controls_lockable
+    - controls_lock_with_slock
     - ansible_service_mgr != 'systemd'
     - ansible_env.XDG_RUNTIME_DIR is defined
   tags:

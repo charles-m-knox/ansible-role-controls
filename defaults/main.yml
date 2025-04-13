@@ -12,3 +12,7 @@ controls_x11vnc: false
 controls_suspend: false
 controls_wol_nic: ""
 controls_wol_mac: ""
+
+# if true, slock will be used instead of the desktop environment's screen locker
+# https://wiki.archlinux.org/title/Slock
+controls_lock_with_slock: false

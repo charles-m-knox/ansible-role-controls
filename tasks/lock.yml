@@ -1,19 +1,63 @@
 # SPDX-License-Identifier: MIT-0
 ---
 
-- name: Lock (systemd)
-  ansible.builtin.shell:
-    executable: /bin/bash
-    cmd: |
-      set -o pipefail
-      loginctl lock-session $(loginctl list-sessions --no-legend  | grep -i seat | awk '{ print $1 }')
+- name: Determine the display manager
+  ansible.builtin.stat:
+    path: /etc/systemd/system/display-manager.service
+    follow: false
+  register: display_manager_symlink_result
+  ignore_errors: true
   when:
     - controls_lockable
     - ansible_service_mgr == 'systemd'
   tags:
     - lock
 
-# https://wiki.archlinux.org/title/Slock
+- name: Lock (ly and slock)
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      XAUTHORITY={{ ansible_env.XDG_RUNTIME_DIR }}/lyxauth DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+  when:
+    - controls_lockable
+    - controls_lock_with_slock
+    - ansible_service_mgr == 'systemd'
+    - display_manager_symlink_result.stat.islnk
+    - display_manager_symlink_result.stat.lnk_source is "/usr/lib/systemd/system/ly.service"
+  tags:
+    - lock
+
+- name: Lock (sddm and slock)
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      XAUTHORITY={{ ansible_env.XDG_RUNTIME_DIR }}/sddm/Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+  when:
+    - controls_lockable
+    - controls_lock_with_slock
+    - ansible_service_mgr == 'systemd'
+    - display_manager_symlink_result.stat.islnk
+    - display_manager_symlink_result.stat.lnk_source is "/usr/lib/systemd/system/sddm.service"
+  tags:
+    - lock
+
+- name: Lock (gdm and slock)
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      XAUTHORITY={{ ansible_env.XDG_RUNTIME_DIR }}/gdm/Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+  when:
+    - controls_lockable
+    - controls_lock_with_slock
+    - ansible_service_mgr == 'systemd'
+    - display_manager_symlink_result.stat.islnk
+    - display_manager_symlink_result.stat.lnk_source is "/usr/lib/systemd/system/gdm.service"
+  tags:
+    - lock
+
 - name: Lock (slock, no systemd)
   ansible.builtin.shell:
     executable: /bin/bash
@@ -49,8 +93,22 @@
       esac
   when:
     - controls_lockable
+    - controls_lock_with_slock
     - ansible_service_mgr != 'systemd'
     - ansible_env.XDG_RUNTIME_DIR is defined
+  tags:
+    - lock
+
+- name: Lock (systemd)
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      loginctl lock-session $(loginctl list-sessions --no-legend  | grep -i seat | awk '{ print $1 }')
+  when:
+    - controls_lockable
+    - not controls_lock_with_slock
+    - ansible_service_mgr == 'systemd'
   tags:
     - lock
 
