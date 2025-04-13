@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MIT-0
+---
+# https://superuser.com/a/644829
+
+- name: Caffeine
+  ansible.builtin.shell:
+    # TODO: this is how it could work in KDE but it doesn't?
+    # cmd: "kwriteconfig5 --file ~/.config/powermanagementprofilesrc --group AC --group DPMSControl --key idleTime 86400"
+    cmd: >
+      DISPLAY={{ controls_xdisplay }} xset s off -dpms
+  ignore_errors: false
+  when:
+    - controls_dpms
+  tags:
+    - caffeine

@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Unsuspend
+  ansible.builtin.shell:
+    cmd: "etherwake {{ controls_wol_mac }}"
+  become: true
+  when:
+    - controls_suspend
+    - controls_wol_mac != ""
+    - controls_wol_nic != ""
+  tags:
+    - unsuspend
+  delegate_to: "127.0.0.1"

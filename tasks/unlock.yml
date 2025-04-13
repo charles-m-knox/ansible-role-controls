@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Unlock (systemd)
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      loginctl unlock-session $(loginctl list-sessions --no-legend  | grep -i seat | awk '{ print $1 }')
+  ignore_errors: false
+  when:
+    - controls_lockable
+    - ansible_service_mgr == 'systemd'
+  tags:
+    - unlock
+
+- name: Unlock (slock, no systemd)
+  ansible.builtin.shell:
+    cmd: "killall -q slock || true"
+  become: true
+  ignore_errors: false
+  when:
+    - controls_lockable
+    - ansible_service_mgr != 'systemd'
+    - ansible_env.XDG_RUNTIME_DIR is defined
+  tags:
+    - unlock

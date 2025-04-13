@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Powersaver
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      echo powersave | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+  ignore_errors: false
+  become: true
+  when:
+    - controls_power
+  tags:
+    - powersaver
+
+# cmd: "qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/PowerProfile org.kde.Solid.PowerManagement.Actions.PowerProfile.setProfile power-saver"

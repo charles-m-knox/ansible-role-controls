@@ -1,0 +1,76 @@
+# SPDX-License-Identifier: MIT-0
+---
+# first sequence of events: "away" mode, which entails powersaving and
+# suspending where possible
+
+- name: Unscreenshare
+  ansible.builtin.import_tasks:
+    file: unscreenshare.yml
+
+- name: Idle
+  ansible.builtin.import_tasks:
+    file: idle.yml
+
+- name: Powersaver
+  ansible.builtin.import_tasks:
+    file: powersaver.yml
+
+- name: Lock
+  ansible.builtin.import_tasks:
+    file: lock.yml
+
+- name: Suspend
+  ansible.builtin.import_tasks:
+    file: suspend.yml
+
+# "away" mode is complete; systems are suspended
+
+# now begin "home" mode: unsuspend, etc
+
+- name: Unsuspend
+  ansible.builtin.import_tasks:
+    file: unsuspend.yml
+
+- name: Balanced
+  ansible.builtin.import_tasks:
+    file: balanced.yml
+
+- name: Performance
+  ansible.builtin.import_tasks:
+    file: performance.yml
+
+- name: Unlock
+  ansible.builtin.import_tasks:
+    file: unlock.yml
+
+- name: Screenshare
+  ansible.builtin.import_tasks:
+    file: screenshare.yml
+
+- name: Caffeine
+  ansible.builtin.import_tasks:
+    file: caffeine.yml
+
+# "home" mode is done
+
+# night/day mode colors
+
+- name: 2200K
+  ansible.builtin.import_tasks:
+    file: 2200K.yml
+
+- name: 2700K
+  ansible.builtin.import_tasks:
+    file: 2700K.yml
+
+- name: 3500K
+  ansible.builtin.import_tasks:
+    file: 3500K.yml
+
+- name: 4800K
+  ansible.builtin.import_tasks:
+    file: 4800K.yml
+
+- name: 6500K
+  ansible.builtin.import_tasks:
+    file: 6500K.yml

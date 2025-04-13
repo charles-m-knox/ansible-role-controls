@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Start x11vnc
+  ansible.builtin.systemd_service:
+    scope: user
+    state: restarted
+    name: x11vnc
+  when:
+    - controls_x11vnc
+    - ansible_service_mgr == 'systemd'
+  tags:
+    - screenshare

@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: MIT-0
+---
+
+- name: Stop x11vnc
+  ansible.builtin.systemd_service:
+    scope: user
+    state: stopped
+    name: x11vnc
+  when:
+    - controls_x11vnc
+    - ansible_service_mgr == 'systemd'
+  tags:
+    - unscreenshare

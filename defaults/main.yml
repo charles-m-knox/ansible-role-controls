@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: MIT-0
+---
+
+controls_lockable: false
+controls_redshift: false
+controls_power: false
+controls_dpms: false
+
+controls_xdisplay: ":0"
+controls_x11vnc: false
+
+controls_suspend: false
+controls_wol_nic: ""
+controls_wol_mac: ""

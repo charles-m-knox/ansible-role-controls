@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Enable wake-on-lan (must be root)
+  ansible.builtin.shell:
+    cmd: "ethtool -s {{ controls_wol_nic }} wol g"
+  become: true
+  when:
+    - controls_wol_nic != ""
+  tags:
+    - etherwake
+    - wakeonlan

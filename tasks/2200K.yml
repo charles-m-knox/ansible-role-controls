@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: 2200K
+  ansible.builtin.shell:
+    cmd: "DISPLAY={{ controls_xdisplay }} redshift -P -O 2200"
+  ignore_errors: false
+  when:
+    - controls_redshift
+  tags:
+    - 2200K

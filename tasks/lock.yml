@@ -1,0 +1,62 @@
+# SPDX-License-Identifier: MIT-0
+---
+
+- name: Lock (systemd)
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      loginctl lock-session $(loginctl list-sessions --no-legend  | grep -i seat | awk '{ print $1 }')
+  when:
+    - controls_lockable
+    - ansible_service_mgr == 'systemd'
+  tags:
+    - lock
+
+# https://wiki.archlinux.org/title/Slock
+- name: Lock (slock, no systemd)
+  ansible.builtin.shell:
+    executable: /bin/bash
+    cmd: |
+      set -o pipefail
+      case "$XDG_CURRENT_DESKTOP" in
+      "GNOME")
+        XAUTHORITY={{ ansible_env.XDG_RUNTIME_DIR }}/gdm/Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+        ;;
+      "KDE")
+        # TODO: untested
+        XAUTHORITY={{ ansible_env.XDG_RUNTIME_DIR }}/sddm/Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+        ;;
+      "XFCE")
+        # TODO: untested
+        XAUTHORITY={{ ansible_user_dir }}/.Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+        ;;
+      "LXDE")
+        # TODO: untested
+        XAUTHORITY={{ ansible_user_dir }}/.Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+        ;;
+      "MATE")
+        XAUTHORITY={{ ansible_user_dir }}/.Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+        ;;
+      "Cinnamon")
+        # TODO: untested
+        XAUTHORITY={{ ansible_user_dir }}/.Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+        ;;
+      *)
+        # Code for unknown desktop environment, assumes the ly display manager is used
+        XAUTHORITY={{ ansible_env.XDG_RUNTIME_DIR }}/lyxauth DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &
+        ;;
+      esac
+  when:
+    - controls_lockable
+    - ansible_service_mgr != 'systemd'
+    - ansible_env.XDG_RUNTIME_DIR is defined
+  tags:
+    - lock
+
+# # untested - on Pop!_OS 22.04, ~/.Xauthority exists and is not a symlink to
+# # $XDG_RUNTIME_DIR unlike the above commands
+# - name: lock (slock and sddm)
+#   ansible.builtin.shell:
+#     cmd: "XAUTHORITY={{ ansible_user_dir }}/.Xauthority DISPLAY={{ controls_xdisplay }} nohup slock > /dev/null 2>&1 &"
+#     executable: /bin/bash
