@@ -26,9 +26,9 @@ The following variables are used to dictate which controls get applied to hosts:
 
 - `controls_lockable` - allows the screen to be locked/unlocked.
   - `controls_lock_with_slock` can be set to `true` if you prefer to use `slock`
-    instead of `loginctl` for lock/unlock, but bear in mind that this will require root access
-    and relies on identifying the Xauthority for the current display manager
-    (sddm/ly/gdm/etc)
+    instead of `loginctl` for lock/unlock, but bear in mind that this will
+    require root access and relies on identifying the Xauthority for the current
+    display manager (sddm/ly/gdm/etc)
 - `controls_redshift` - allows the screen's "night light" temperature to be
   controlled via `redshift`.
 - `controls_power` - allows the CPU governor to be changed from values such
